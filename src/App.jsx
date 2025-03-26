@@ -5,7 +5,7 @@ import './App.css'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import ViewSchedulePage from './ViewSchedulePage';
-
+import ClassCard from './ClassCard';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,6 +14,8 @@ function App() {
     <>
       {/* for bootstrap*/}
       <ViewSchedulePage />
+
+      <ClassCard />
 
 
 
