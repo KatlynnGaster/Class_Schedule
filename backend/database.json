@@ -52,14 +52,5 @@
     "days": "T,R",
     "time": "1300-1500",
     "room": "223"
-  },
-  {
-    "id": 5,
-    "code": "2020",
-    "name": "College Algebra",
-    "section": "A",
-    "days": "M,W",
-    "time": "0900-1000",
-    "room": "150"
   }
 ]

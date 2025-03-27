@@ -83,7 +83,7 @@ const ClassList = () => {
       <ul>
         {classes.map((cls) => (
           <li key={cls.id}>
-            {cls.code} - {cls.name} - {cls.description} in {cls.term}
+            {cls.time} -- {cls.days} -- {cls.code} -- {cls.name} -- {cls.section} -- {cls.room}
           </li>
         ))}
       </ul>
