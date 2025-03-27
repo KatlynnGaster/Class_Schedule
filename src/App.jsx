@@ -5,6 +5,7 @@ import './App.css'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import ViewSchedulePage from './ViewSchedulePage';
+import ClassList from './APITest';
 
 
 function App() {
@@ -14,8 +15,7 @@ function App() {
     <>
       {/* for bootstrap*/}
       <ViewSchedulePage />
-
-
+      <ClassList />
 
     </>
   )
