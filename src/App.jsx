@@ -1,24 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
-import ViewSchedulePage from './ViewSchedulePage';
+import React, { useState } from 'react';
+import { Container, Navbar, Nav } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import './App.css';
 
+const App = () => {
+  const [view, setView] = useState('grid'); // Track the current view
 
-function App() {
-  const [count, setCount] = useState(0)
+  const handleViewSwitch = (viewType) => {
+    setView(viewType);
+  };
 
   return (
-    <>
-      {/* for bootstrap*/}
-      <ViewSchedulePage />
+    <div>
+      {/* Navbar */}
+      <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+        <Container>
+          <Navbar.Brand>Class Scheduling</Navbar.Brand>
+          <Nav className="mr-auto"> {/* This ensures the links are left-aligned */}
+            <Nav.Link onClick={() => handleViewSwitch('grid')}>Grid View</Nav.Link>
+            <Nav.Link onClick={() => handleViewSwitch('calendar')}>Calendar View</Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
 
+      {/* Content Area */}
+      <Container className="mt-5"> {/* Increase margin to prevent content from being hidden behind navbar */}
+        {/* {view === 'grid' ? <GridView /> : <CalendarView />} */}
+      </Container>
+    </div>
+  );
+};
 
-
-    </>
-  )
-}
-
-export default App
+export default App;
