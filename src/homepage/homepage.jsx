@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
-import './App.css';
+import './homepage.css';
 
 const App = () => {
   const [view, setView] = useState('grid'); // Track the current view
