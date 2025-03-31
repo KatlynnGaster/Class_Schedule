@@ -65,27 +65,6 @@ export const addClassScheduleRoom = async (classData) => {
     return isSuccess;
 };
 
-export const getClasses = async () => {
-    const apiEndpoint = url + `/csr?scope=all`; // Assuming this is your backend endpoint
-    const inputMethod = 'GET';
-
-    try {
-        const response = await sendRequest({
-            apiEndpoint,
-            inputMethod,
-        });
-
-        if (response && Array.isArray(response)) {
-            return response;
-        } else {
-            return [];
-        }
-    } catch (error) {
-        console.error("Error fetching classes:", error);
-        throw error;
-    }
-};
-
 export const addPreference = async (preferenceData) => {
     const apiEndpoint = url + '/pref';
     const inputMethod = 'POST';
@@ -120,7 +99,6 @@ export const getRooms = async () => {
         throw error;
     }
 };
-
 
 export const getFaculty = async () => {
     const apiEndpoint = url + `/faculty?scope=all`;
