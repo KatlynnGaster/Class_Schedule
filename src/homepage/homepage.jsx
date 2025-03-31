@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import ScheduleGrid from '../gridView/gridView';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './homepage.css';
 
 const App = () => {
@@ -25,7 +26,7 @@ const App = () => {
 
       {/* Content Area */}
       <Container className="mt-5"> {/* Increase margin to prevent content from being hidden behind navbar */}
-        {/* {view === 'grid' ? <GridView /> : <CalendarView />} */}
+        {view === 'grid' ? <ScheduleGrid /> : null}
       </Container>
     </div>
   );

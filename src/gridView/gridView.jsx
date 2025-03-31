@@ -3,7 +3,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "./App.css";
+import "./gridView.css";
 
 const ItemTypes = {
   CLASS: "class",
@@ -143,8 +143,4 @@ function ScheduleGrid() {
   );
 }
 
-function App() {
-  return <ScheduleGrid />;
-}
-
-export default App;
+export default ScheduleGrid;
