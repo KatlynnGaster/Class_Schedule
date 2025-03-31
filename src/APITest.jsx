@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { getClasses } from './api/api';
-import { addClassScheduleRoom } from './api/api';
+import { addClass } from './api/api';
 
 const ClassList = () => {
   const [classes, setClasses] = useState([]);
   const [formData, setFormData] = useState({
-    code: "",
     name: "",
+    description: "",
+    capacity: "",
+    code: "",
+    kind: "",
     section: "",
-    days: "",
-    time: "",
-    room: ""
+    term: "",
   });
 
   useEffect(() => {
