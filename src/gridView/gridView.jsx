@@ -4,6 +4,15 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./gridView.css";
+import useClasses from "../getClassLogic";
+
+const AllClasses = () => {
+  const { classes } = useClasses();
+  const classList = classes.map((cls) => (
+    <ClassCard key={cls.id} className={cls.data.name} />
+  ));
+  return <div className="class-list">{classList}</div>;
+}
 
 const ItemTypes = {
   CLASS: "class",
@@ -133,10 +142,12 @@ function ScheduleGrid() {
         </div>
 
         {/* Class List */}
-        <div className="class-list">
-          <ClassCard className="Math 101" />
+        
+        <div className="class-list-container">
+          <AllClasses />
+          {/* <ClassCard className="Math 101" />
           <ClassCard className="Physics 202" />
-          <ClassCard className="Chemistry 303" />
+          <ClassCard className="Chemistry 303" /> */}
         </div>
       </div>
     </DndProvider>

@@ -52,6 +52,27 @@ export const addClass = async (classData) => {
     return isSuccess;
 };
 
+export const getAllClass = async () => {
+    const apiEndpoint = url + `/class?scope=all`;
+    const inputMethod = 'GET';
+
+    try {
+        const response = await sendRequest({
+            apiEndpoint,
+            inputMethod,
+        });
+
+        if (response && Array.isArray(response)) {
+            return response; 
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching schedules:", error);
+        throw error;
+    }
+};
+
 export const addClassScheduleRoom = async (classData) => {
     const apiEndpoint = url + '/csr';
     const inputMethod = 'POST';
