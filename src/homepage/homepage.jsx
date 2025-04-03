@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import ScheduleGrid from '../gridView/gridView';
+import CourseList from '../listView/listView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './homepage.css';
 
@@ -20,6 +21,7 @@ const App = () => {
           <Nav className="mr-auto"> {/* This ensures the links are left-aligned */}
             <Nav.Link onClick={() => handleViewSwitch('grid')}>Grid View</Nav.Link>
             <Nav.Link onClick={() => handleViewSwitch('calendar')}>Calendar View</Nav.Link>
+            <Nav.Link onClick={() => handleViewSwitch('list')}>List View</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -27,6 +29,10 @@ const App = () => {
       {/* Content Area */}
       <Container className="mt-5"> {/* Increase margin to prevent content from being hidden behind navbar */}
         {view === 'grid' ? <ScheduleGrid /> : null}
+      </Container>
+      <Container className="mt-5">
+      {view === 'grid' && <ScheduleGrid />}
+      {view === 'list' && <CourseList />} {/* Use CourseList here */}
       </Container>
     </div>
   );
