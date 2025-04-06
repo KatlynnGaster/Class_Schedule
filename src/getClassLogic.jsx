@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { getAllClass } from './api/api';
 
-const useClasses = () => {
+const getClasses = () => {
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
         const fetchClasses = await getAllClass();
+        console.log('classes in the get logic', fetchClasses)
         setClasses(fetchClasses);
       }
       catch (error) {
@@ -19,19 +20,6 @@ const useClasses = () => {
   }, []);
 
   return { classes }  
-
-  // return (
-  //   <div>
-  //     <h1>Class List</h1>
-  //     <ul>
-  //       {classes.map((cls) => (
-  //         <li key={cls.id}>
-  //           {cls.data.name} -- {cls.data.description} -- {cls.data.capacity} -- {cls.data.code} -- {cls.data.kind} -- {cls.data.section} -- {cls.data.term}
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </div>
-  // );
 };
 
-export default useClasses;
+export default getClasses;

@@ -4,24 +4,37 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./gridView.css";
-import useClasses from "../getClassLogic";
+import ClassCard from "../ClassCard";
+import getClasses from "../getClassLogic";
 
-const AllClasses = () => {
-  const { classes } = useClasses();
+const GetAllClasses = () => {
+  const { classes } = getClasses();
   const classList = classes.map((cls) => (
-    <ClassCard key={cls.id} className={cls.data.name} />
+    <div key={cls.id} className="class-container">
+    <DragClassCard
+      key={cls.id}
+      classId={cls.id}
+      className={cls.data.name}
+      classDescrpt={cls.data.description}
+      classCap={cls.data.capacity}
+      classCode={cls.data.code}
+      classType={cls.data.kind}
+      classSec={cls.data.section}
+      classTerm={cls.data.term}
+    />
+</div>
   ));
   return <div className="class-list">{classList}</div>;
-}
+};
 
 const ItemTypes = {
   CLASS: "class",
 };
 
-function ClassCard({ className }) {
+function DragClassCard({ classId, className, classDescrpt, classCap, classCode, classType, classSec, classTerm}) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.CLASS,
-    item: { className },
+    item: { classId, className },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -37,7 +50,16 @@ function ClassCard({ className }) {
         fontSize: "1rem",
       }}
     >
-      {className}
+      <ClassCard
+      classId={classId}
+      className={className}
+      classDescrpt={classDescrpt}
+      classCap={classCap} 
+      classCode={classCode}
+      classType={classType}
+      classSec={classSec} 
+      classTerm={classTerm}
+    />
     </div>
   );
 }
@@ -144,7 +166,7 @@ function ScheduleGrid() {
         {/* Class List */}
         
         <div className="class-list-container">
-          <AllClasses />
+          <GetAllClasses />
           {/* <ClassCard className="Math 101" />
           <ClassCard className="Physics 202" />
           <ClassCard className="Chemistry 303" /> */}
