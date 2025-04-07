@@ -4,6 +4,7 @@ import ScheduleGrid from '../gridView/gridView';
 import CourseList from '../listView/listView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './homepage.css';
+import ExcelFileViewer from '../testExcel';
 
 const App = () => {
   const [view, setView] = useState('grid'); // Track the current view
@@ -26,15 +27,13 @@ const App = () => {
         </Container>
       </Navbar>
 
-      {/* Content Area
-      <Container className="mt-5"> {/* Increase margin to prevent content from being hidden behind navbar }
-        {view === 'grid' ? <ScheduleGrid /> : null}
-      </Container> */}
+      {/* Content Area */}
 
       <Container className="mt-5">
       {view === 'grid' && <ScheduleGrid />}
       {view === 'list' && <CourseList />} {/* Use CourseList here */}
       </Container>
+
     </div>
   );
 };

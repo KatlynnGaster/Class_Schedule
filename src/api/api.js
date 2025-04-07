@@ -73,6 +73,20 @@ export const getAllClass = async () => {
     }
 };
 
+// Depending on what we use as the endpoint, but I will just call it upload
+export const uploadClass = async (classData) => {
+    const apiEndpoint = url + '/upload';
+    const inputMethod = 'POST';
+    
+    const isSuccess = await sendRequest({
+        apiEndpoint,
+        inputMethod,
+        inputBody: classData,
+    });
+
+    return isSuccess;
+};
+
 export const addClassScheduleRoom = async (classData) => {
     const apiEndpoint = url + '/csr';
     const inputMethod = 'POST';
