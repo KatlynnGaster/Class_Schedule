@@ -4,7 +4,7 @@ This template provides a minimal setup to get React working in Vite with HMR and
 
 To run:
 1) cd into directory with PPL_Class_Schedule
-2) npm install
+2) npm install & need to npm install xlsx
 3) npm run dev 
 
 To run server:

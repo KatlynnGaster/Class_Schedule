@@ -76,7 +76,9 @@ const App = () => {
       </Navbar>
 
       {/* Content Area */}
-
+      <Container className="mt-5"> {/* Increase margin to prevent content from being hidden behind navbar */}
+        {view === 'grid' ? <ScheduleGrid /> : null}
+      </Container>
       <Container className="mt-5">
       {view === 'list' && <CourseList />} {/* Use CourseList here */}
       </Container>
