@@ -4,7 +4,6 @@ import ScheduleGrid from '../gridView/gridView';
 import CourseList from '../listView/listView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './homepage.css';
-import ExcelFileViewer from '../testExcel';
 import * as XLSX from 'xlsx'; // ← for parsing Excel files
 
 
