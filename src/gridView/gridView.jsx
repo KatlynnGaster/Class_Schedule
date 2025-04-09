@@ -42,13 +42,13 @@ function DragClassCard({ classId, className, classDescrpt, classCap, classCode, 
 
   return (
     <div
-      ref={drag}
-      className="class-card p-2 bg-primary text-white text-center"
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        cursor: "grab",
-        fontSize: "1rem",
-      }}
+		ref={drag}
+		className="class-card p-2 bg-primary text-white text-center"
+		style={{
+		opacity: isDragging ? 0.5 : 1,
+		cursor: "grab",
+		fontSize: "1rem",
+		}}
     >
       <ClassCard
       classId={classId}
