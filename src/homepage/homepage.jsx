@@ -5,7 +5,7 @@ import CourseList from '../listView/listView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './homepage.css';
 import * as XLSX from 'xlsx'; // ← for parsing Excel files
-
+import postTableData from '../api/uploadClassLogic';
 
 
 const App = () => {
@@ -22,15 +22,17 @@ const App = () => {
     setParsedData(null);
   };
 
-
+  //const {tableData, error } = postTableData(parsedData); //custom hook for backend interaction
+  // Handle file selection
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
+    setFileError(null);
     setUploadSuccess(false);
     setParsedData(null);
     console.log("Selected file:", selectedFile);
   };
-
+  // Handle file upload and parsing
   const handleFileUpload = () => {
     if (!file) {
       alert("Please select a file first.");
@@ -115,6 +117,31 @@ const App = () => {
                 <pre className="bg-light p-2 border rounded" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
                   {JSON.stringify(parsedData.slice(0, 5), null, 2)}
                 </pre>
+                {/* API Interaction */}
+                {/* <Button
+                  className="mt-3"
+                  variant="primary"
+                  onClick={() => {
+                    if (parsedData) setParsedData(parsedData); // Pass parsed data to the custom hook
+                  }}
+                >
+                  Send to API
+                </Button>
+
+                {error && (
+                  <Alert variant="danger" className="mt-3">
+                    Error posting data: {error}
+                  </Alert>
+                )}
+
+                {tableData.length > 0 && (
+                  <div className="mt-3">
+                    <h5>API Response:</h5>
+                    <pre className="bg-light p-2 border rounded" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+                      {JSON.stringify(tableData, null, 2)}
+                    </pre>
+                  </div>
+                )} */}
               </div>
             )}
           </div>

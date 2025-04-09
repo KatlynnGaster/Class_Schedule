@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
-import { addClass } from './api';  //uploadClass goes here
+import { uploadClass } from './api';  //uploadClass goes here
 
 const postTableData = (file) => {
   const [tableData, setTableData] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTableData = async () => {
       try {
-        if (file) {
-            const data = await addClass(file);
-            setTableData(data);
-        }
+          const data = await uploadClass(file);
+          setTableData(data);
+          setError(null)
       }
       catch (error) {
         console.error('Error fetching from table data:', error);
+        setError("Failed to fetch data")
         setTableData([])
       }
     };
@@ -21,10 +22,9 @@ const postTableData = (file) => {
     if (file) {
         fetchTableData(data);
     }
-    
   }, [file]);
 
-  return { tableData }  
+  return { tableData, error}  
 };
 
 export default postTableData;
