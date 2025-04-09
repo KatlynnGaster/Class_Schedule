@@ -1,30 +1,23 @@
 import { useState, useEffect } from 'react';
 import { uploadClass } from './api';  //uploadClass goes here
 
-const postTableData = (file) => {
+const postTableData = () => {
   const [tableData, setTableData] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchTableData = async () => {
-      try {
-          const data = await uploadClass(file);
-          setTableData(data);
-          setError(null)
-      }
-      catch (error) {
-        console.error('Error fetching from table data:', error);
-        setError("Failed to fetch data")
-        setTableData([])
-      }
-    };
+ const fetchTableData = async (oneJsonElement) => {
+  try {
+    const data = await uploadClass(oneJsonElement);
+    setTableData((prevData) => [...prevData, data]);
+    setError(null);
+  } catch(err) {
+    console.error("Error POST xlsx data", err);
+    setError("Failed to POST data");
+    return null;
+  }
+ };
 
-    if (file) {
-        fetchTableData(data);
-    }
-  }, [file]);
-
-  return { tableData, error}  
+  return { tableData, error, fetchTableData}  
 };
 
 export default postTableData;

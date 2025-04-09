@@ -15,6 +15,8 @@ const App = () => {
   const [parsedData, setParsedData] = useState(null);
   const [fileError, setFileError] = useState(null);
 
+ //custom hook for backend interaction
+  const { table, error, fetchTableData } = postTableData();
 
   const handleViewSwitch = (viewType) => {
     setView(viewType);
@@ -22,7 +24,7 @@ const App = () => {
     setParsedData(null);
   };
 
-  //const {tableData, error } = postTableData(parsedData); //custom hook for backend interaction
+  
   // Handle file selection
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -42,7 +44,7 @@ const App = () => {
     setFileError(null);
   
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
@@ -51,9 +53,17 @@ const App = () => {
         console.log("Parsed Excel Data:", jsonData);
 
         setParsedData(jsonData);       
-        setUploadSuccess(true);       
+        setUploadSuccess(true);
+
+        for (const element of jsonData) {
+          const response = await fetchTableData(element); // Use the updated hook
+          if (response) {
+            responses.push(response); // Collect successful responses
+          }
+        }
       } catch (err) {
         alert("Error parsing the file.");
+        setFileError("Error parsing the file or uploading data.");
         console.error(err);
       }
     };
@@ -117,31 +127,6 @@ const App = () => {
                 <pre className="bg-light p-2 border rounded" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
                   {JSON.stringify(parsedData.slice(0, 5), null, 2)}
                 </pre>
-                {/* API Interaction */}
-                {/* <Button
-                  className="mt-3"
-                  variant="primary"
-                  onClick={() => {
-                    if (parsedData) setParsedData(parsedData); // Pass parsed data to the custom hook
-                  }}
-                >
-                  Send to API
-                </Button>
-
-                {error && (
-                  <Alert variant="danger" className="mt-3">
-                    Error posting data: {error}
-                  </Alert>
-                )}
-
-                {tableData.length > 0 && (
-                  <div className="mt-3">
-                    <h5>API Response:</h5>
-                    <pre className="bg-light p-2 border rounded" style={{ maxHeight: '300px', overflowY: 'scroll' }}>
-                      {JSON.stringify(tableData, null, 2)}
-                    </pre>
-                  </div>
-                )} */}
               </div>
             )}
           </div>
