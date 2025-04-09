@@ -19,7 +19,7 @@ const App = () => {
         <Container>
           <Navbar.Brand>Class Scheduling</Navbar.Brand>
           <Nav className="mr-auto"> {/* This ensures the links are left-aligned */}
-            <Nav.Link onClick={() => handleViewSwitch('grid')}>Grid View</Nav.Link>
+            <Nav.Link onClick={() => handleViewSwitch('grid')}>Room View</Nav.Link>
             <Nav.Link onClick={() => handleViewSwitch('calendar')}>Calendar View</Nav.Link>
             <Nav.Link onClick={() => handleViewSwitch('list')}>List View</Nav.Link>
           </Nav>
@@ -31,7 +31,6 @@ const App = () => {
         {view === 'grid' ? <ScheduleGrid /> : null}
       </Container>
       <Container className="mt-5">
-      {view === 'grid' && <ScheduleGrid />}
       {view === 'list' && <CourseList />} {/* Use CourseList here */}
       </Container>
     </div>
