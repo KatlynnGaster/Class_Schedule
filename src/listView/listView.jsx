@@ -1,98 +1,75 @@
-import React from "react";
-import "./listView.css"; // Ensure the CSS is linked
+import React, { useEffect, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
+import { AllCommunityModule } from "ag-grid-community";
+import { ModuleRegistry } from "ag-grid-community";
+import getClasses from "../getClassLogic";
 
-const mathCourses = [
-  { MATH: "Calc I", Core: "Core", Code: "MATH 101", Name: "Calculus I", Sec: "A", Term: "Fall", Days: "MWF", Time: "10-11:30", Cap: 30, Credit: 3, Room: "B101", Instr: "Dr. Smith", Sched: "Online" },
-  { MATH: "Lin Alg", Core: "Elective", Code: "MATH 210", Name: "Linear Algebra", Sec: "B", Term: "Spring", Days: "TTh", Time: "1-2:30", Cap: 25, Credit: 3, Room: "C202", Instr: "Prof. Johnson", Sched: "In-Person" }
-];
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
-const physicsCourses = [
-  { PHYS: "Mechanics", Core: "Core", Code: "PHYS 101", Name: "Mechanics", Sec: "A", Term: "Fall", Days: "MWF", Time: "9-10:30", Cap: 35, Credit: 4, Room: "D101", Instr: "Dr. Lee", Sched: "In-Person" },
-  { PHYS: "Electromagnetism", Core: "Core", Code: "PHYS 201", Name: "Electromagnetism", Sec: "B", Term: "Spring", Days: "TTh", Time: "2-3:30", Cap: 40, Credit: 4, Room: "E202", Instr: "Prof. Wang", Sched: "Online" }
-];
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const CourseList = () => {
-  return (
-    <div className="list-container">
-      <table className="course-table">
-        <thead>
-          <tr>
-            <th>MATH</th>
-            <th>Core</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Sec</th>
-            <th>Term</th>
-            <th>Days</th>
-            <th>Time</th>
-            <th>Cap</th>
-            <th>Credit</th>
-            <th>Room</th>
-            <th>Instr</th>
-            <th>Sched</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mathCourses.map((course, index) => (
-            <tr key={index}>
-              <td>{course.MATH}</td>
-              <td>{course.Core}</td>
-              <td>{course.Code}</td>
-              <td>{course.Name}</td>
-              <td>{course.Sec}</td>
-              <td>{course.Term}</td>
-              <td>{course.Days}</td>
-              <td>{course.Time}</td>
-              <td>{course.Cap}</td>
-              <td>{course.Credit}</td>
-              <td>{course.Room}</td>
-              <td>{course.Instr}</td>
-              <td>{course.Sched}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  const { classes } = getClasses();
+  const [rowData, setRowData] = useState([]);
 
-      <table className="course-table physics-table">
-        <thead>
-          <tr>
-            <th>PHYS</th>
-            <th>Core</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Sec</th>
-            <th>Term</th>
-            <th>Days</th>
-            <th>Time</th>
-            <th>Cap</th>
-            <th>Credit</th>
-            <th>Room</th>
-            <th>Instr</th>
-            <th>Sched</th>
-          </tr>
-        </thead>
-        <tbody>
-          {physicsCourses.map((course, index) => (
-            <tr key={index}>
-              <td>{course.PHYS}</td>
-              <td>{course.Core}</td>
-              <td>{course.Code}</td>
-              <td>{course.Name}</td>
-              <td>{course.Sec}</td>
-              <td>{course.Term}</td>
-              <td>{course.Days}</td>
-              <td>{course.Time}</td>
-              <td>{course.Cap}</td>
-              <td>{course.Credit}</td>
-              <td>{course.Room}</td>
-              <td>{course.Instr}</td>
-              <td>{course.Sched}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  const [colDefs, setColDefs] = useState([
+    { field: "subject", headerName: "WCU Prefix" },
+    { field: "code", headerName: "Course Code" },
+    { field: "name", headerName: "Course Name" },
+    { field: "year", headerName: "Year" },
+    { field: "section", headerName: "Section" },
+    { field: "term", headerName: "Term" },
+    { field: "days", headerName: "Days" },
+    { field: "time", headerName: "Time" },
+    { field: "cap", headerName: "Capacity" },
+    { field: "credit", headerName: "Credit Hours" },
+    { field: "room", headerName: "Room Number" },
+    { field: "instructor", headerName: "Instructor" }
+  ]);
+
+  useEffect(() => {
+    console.log("Classes data from getClasses:", classes);
+
+    if (classes && Array.isArray(classes) && classes.length > 0) {
+      const mapped = classes.map((cls) => ({
+        subject: cls?.data?.kind,
+        code: cls?.data?.code,
+        name: cls?.data?.name,
+        year: cls?.data?.year,
+        section: cls?.data?.section,
+        term: cls?.data?.term,
+        days: cls?.data?.days,     
+        time: cls?.data?.time,
+        cap: cls?.data?.capacity,
+        credit: cls?.data?.credit,
+        room: cls?.data?.room,
+        instructor: cls?.data?.instructor
+      }));
+      console.log("Mapped data for AG Grid:", mapped);
+      setRowData(mapped);
+    } else {
+      setRowData([]);
+    }
+  }, [classes]);
+
+  return (
+    <div
+      className="ag-theme-alpine"
+      style={{
+        width: "100vw",     // full viewport width
+        height: "100vh",    // or whatever height you want
+        margin: 0,
+        padding: 0,
+      }}
+    >
+      <AgGridReact
+        rowData={rowData}
+        columnDefs={colDefs}
+        
+      />
     </div>
   );
 };
+
 
 export default CourseList;
