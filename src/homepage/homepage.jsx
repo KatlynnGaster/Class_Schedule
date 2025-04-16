@@ -49,7 +49,27 @@ const App = () => {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        let jsonData = XLSX.utils.sheet_to_json(worksheet, {defval: "unknown"});
+        // Clean up JSON data
+        jsonData = jsonData.map(entry => {
+        // Remove __EMPTY fields
+          Object.keys(entry).forEach(key => {
+            if (key.startsWith("__EMPTY")) {
+              delete entry[key];
+            }
+          });
+
+          // Assign specific values to Capacity and Instructor
+          entry["Capacity"] = entry["Capacity"] === "unknown" ? 0 : entry["Capacity"]; // Set default capacity to 30
+          entry["Instructor"] = entry["Instructor"] === "unknown" ? "unassigned" : entry["Instructor"]; // Set default instructor to "TBD"
+
+          return entry;
+
+          // Now make sure the integers are numbers [Course Code, Year, Credit Hrs]
+          // Make sure there are no hyphens in the Course Codes
+          // Lastly fix time 10:00 AM - 10:50 AM for every time
+        });
+
         console.log("Parsed Excel Data:", jsonData);
 
         setParsedData(jsonData);       
