@@ -50,6 +50,46 @@ const App = () => {
         const workbook = XLSX.read(data, { type: 'array' });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         let jsonData = XLSX.utils.sheet_to_json(worksheet, {defval: "unknown"});
+        
+
+
+        const normalizeTime = (timeStr) => {
+          if (!timeStr) return "";
+          let cleanedString = timeStr.replace(/[^0-9:-]/g, "");
+          let [start, end] = cleanedString.split("-") || [];
+          if (!start || !end) {
+            console.error("Error: start or end is undefined.");
+            return "";
+          }
+
+          let startHasColon = start.includes(":");
+          let endHasColon = end.includes(":");
+          if(!startHasColon) {
+            if(start.length === 4){
+              start = start.slice(0,2) + ":" + start.slice(2);
+            }
+            else if(start.length === 3){
+              start = start.slice(0,1) + ":" + start.slice(1);
+            }
+            else {
+              start = start + ":00"
+            }
+          }
+          if(!endHasColon) {
+            if(end.length === 4){
+              end = end.slice(0,2) + ":" + end.slice(2);
+            }
+            else if(end.length === 3){
+              end = end.slice(0,1) + ":" + end.slice(1);
+            }
+            else {
+              end = end + ":00"
+            }
+          }
+          return `${start}-${end}`;
+        };
+
+
         // Clean up JSON data
         jsonData = jsonData.map(entry => {
         // Remove __EMPTY fields
@@ -60,8 +100,12 @@ const App = () => {
           });
 
           // Assign specific values to Capacity and Instructor
-          entry["Capacity"] = entry["Capacity"] === "unknown" ? 0 : entry["Capacity"]; // Set default capacity to 30
-          entry["Instructor"] = entry["Instructor"] === "unknown" ? "unassigned" : entry["Instructor"]; // Set default instructor to "TBD"
+          entry["Capacity"] = entry["Capacity"] === "unknown" ? 0 : entry["Capacity"];
+          entry["Instructor"] = entry["Instructor"] === "unknown" ? "unassigned" : entry["Instructor"];
+
+          if (entry["Times"]) {
+            entry["Times"] = normalizeTime(entry["Times"]);
+          }
 
           return entry;
 
@@ -156,3 +200,4 @@ const App = () => {
 };
 
 export default App;
+
