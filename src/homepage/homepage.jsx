@@ -102,16 +102,21 @@ const App = () => {
           // Assign specific values to Capacity and Instructor
           entry["Capacity"] = entry["Capacity"] === "unknown" ? 0 : entry["Capacity"];
           entry["Instructor"] = entry["Instructor"] === "unknown" ? "unassigned" : entry["Instructor"];
+          entry["Credit Hrs"] = entry["Credit Hrs"] === "unknown" ? 0 : entry["Credit Hrs"];
+          entry["Credit Hrs"] = entry["Credit Hrs"] === "-" ? 0 : entry["Credit Hrs"];
+          entry["Times"] = entry["Times"] === "unknown" ? "0:00-0:00" : entry["Times"];
+          entry["Days"] = entry["Days"] === "unknown" ? "MTWRF" : entry["Days"];
+          entry["Course Code"] = String(entry["Course Code"]);
 
           if (entry["Times"]) {
             entry["Times"] = normalizeTime(entry["Times"]);
           }
+          
+          if (entry["Days"]) {
+            entry["Days"] = entry["Days"].split("").filter(char => "MTWRF".includes(char)).join("")
+          }
 
           return entry;
-
-          // Now make sure the integers are numbers [Course Code, Year, Credit Hrs]
-          // Make sure there are no hyphens in the Course Codes
-          // Lastly fix time 10:00 AM - 10:50 AM for every time
         });
 
         console.log("Parsed Excel Data:", jsonData);
