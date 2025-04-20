@@ -5,10 +5,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./gridView.css";
 import ClassCard from "../ClassCard";
-import getClasses from "../getClassLogic";
+import { getDataContext } from "../api/APIDataProvider";
 
 const GetAllClasses = () => {
-  const { classes } = getClasses();
+  const { classes } = getDataContext();
   const classList = classes.map((cls) => (
     <div key={cls.id} className="class-container">
     <DragClassCard
