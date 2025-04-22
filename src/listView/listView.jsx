@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { AllCommunityModule } from "ag-grid-community";
 import { ModuleRegistry } from "ag-grid-community";
-
+import { useGridExport } from "../DownloadData/GridExportContent";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { getDataContext } from "../api/APIDataProvider";
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -10,6 +10,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const CourseList = () => {
   const { classes, faculty, schedules } = getDataContext();
   const [rowData, setRowData] = useState([]);
+  const gridRef = useRef(); //ref for the grid
+
+  const { setGrid } = useGridExport();
 
   const [colDefs, setColDefs] = useState([
     { field: "subject", headerName: "WCU Prefix" },
@@ -30,6 +33,7 @@ const CourseList = () => {
     console.log("Classes data from getDataContext:", classes);
     console.log("Faculty data from getDataContext:", faculty);
     console.log("Schedules data from getDataContext:", schedules);
+
 
     if (classes && Array.isArray(classes) && classes.length > 0) {
      
@@ -59,24 +63,33 @@ const CourseList = () => {
     }
   }, [classes, faculty, schedules]);
 
+  useEffect(() => {
+    if (gridRef.current) {
+      setGrid(gridRef.current); // set it in context
+    }
+  }, [gridRef.current]); // runs once after mount
+
+
   return (
-    <div
-      className="ag-theme-alpine"
-      style={{
-        width: "100vw",     // full viewport width
-        height: "100vh",    // or whatever height you want
-        margin: 0,
-        padding: 0,
-      }}
-    >
-      <AgGridReact
-        rowData={rowData}
-        columnDefs={colDefs}
-        
-      />
-    </div>
+    <>
+      <div
+        className="ag-theme-alpine"
+        style={{
+          width: "100vw",     // full screen width
+          height: "calc(100vh - 60px)",  // fill most of screen minus space for button
+          overflow: "hidden"
+        }}
+      >
+        <AgGridReact
+          ref={gridRef}
+          rowData={rowData}
+          columnDefs={colDefs}
+          domLayout="autoHeight"  // or "normal" or "autoHeight"
+        />
+      </div>
+    </>
   );
-};
+}; 
 
 
 export default CourseList;

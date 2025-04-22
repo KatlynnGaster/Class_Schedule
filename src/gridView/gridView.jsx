@@ -1,4 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext, useCallback } from "react";
+import { GridExportContext } from "../DownloadData/GridExportContent"; // Import GridExportContext
+
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -101,32 +103,71 @@ function ScheduleGrid() {
   const [schedule, setSchedule] = useState({});
   const scrollContainerRef = useRef(null);
   const headerRef = useRef(null);
+  const gridRef = useRef(null);
+
+  const { setCustomExport, setGrid } = useContext(GridExportContext); // Access context
 
   useEffect(() => {
-    const syncScroll = () => {
-      if (scrollContainerRef.current && headerRef.current) {
-        headerRef.current.scrollLeft = scrollContainerRef.current.scrollLeft;
-      }
-    };
-
-    const scrollElement = scrollContainerRef.current;
-    if (scrollElement) {
-      scrollElement.addEventListener("scroll", syncScroll);
+    if (Object.keys(schedule).length > 0) {
+      console.log("Schedule updated:", schedule);
     }
+  }, [schedule]);
 
-    return () => {
-      if (scrollElement) {
-        scrollElement.removeEventListener("scroll", syncScroll);
-      }
-    };
-  }, []);
+  useEffect(() => {
+    if (gridRef.current) {
+      console.log("Grid is set:", gridRef.current);
+      setGrid(gridRef.current);
+    } else {
+      console.log("Grid reference is not yet available.");
+    }
+  
+    if (setCustomExport) {
+      setCustomExport(() => exportScheduleToCSV);
+    }
+  }, [schedule, setCustomExport, setGrid]);
+
 
   const handleDropClass = (room, time, className) => {
-    setSchedule((prev) => ({
-      ...prev,
-      [`${room}-${time}`]: className,
-    }));
+    console.log(`Dropping ${className} into ${room}-${time}`);
+    setSchedule((prev) => {
+      const updatedSchedule = {
+        ...prev,
+        [`${room}-${time}`]: className,
+      };
+      console.log("Updated schedule:", updatedSchedule); // Log updated state
+      return updatedSchedule;
+    });
   };
+
+  const exportScheduleToCSV = useCallback(() => {
+  setTimeout(() => {
+    console.log("Schedule before export:", schedule); // Now always up-to-date
+
+    if (Object.keys(schedule).length === 0) {
+      console.warn("Schedule is empty. No data to export.");
+      return;
+    }
+
+    const gridData = [];
+    roomNumbers.forEach((room) => {
+      timesOfDay.forEach((time) => {
+        const classInCell = schedule[`${room}-${time}`] || "";
+        gridData.push([formatTime(time), room, classInCell]);
+      });
+    });
+
+    const csvContent = [
+      ["Time", "Room", "Class"].join(","),
+      ...gridData.map(row => row.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "schedule.csv";
+    link.click();
+  }, 100);
+}, [schedule]);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -145,7 +186,7 @@ function ScheduleGrid() {
 
         {/* Single Scrollable Grid Body */}
         <div className="scroll-container" ref={scrollContainerRef}>
-          <div className="grid-body">
+          <div className="grid-body" ref={gridRef}>
             {timesOfDay.map((time) => (
               <div className="grid-row" key={time}>
                 <div className="hour-label">{formatTime(time)}</div>
@@ -164,12 +205,8 @@ function ScheduleGrid() {
         </div>
 
         {/* Class List */}
-        
         <div className="class-list-container">
           <GetAllClasses />
-          {/* <ClassCard className="Math 101" />
-          <ClassCard className="Physics 202" />
-          <ClassCard className="Chemistry 303" /> */}
         </div>
       </div>
     </DndProvider>
