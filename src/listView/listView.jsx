@@ -1,11 +1,43 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo, StrictMode } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { AllCommunityModule } from "ag-grid-community";
-import { ModuleRegistry } from "ag-grid-community";
+//import { ModuleRegistry } from "ag-grid-community";
 import { useGridExport } from "../DownloadData/GridExportContent";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { getDataContext } from "../api/APIDataProvider";
+import { createRoot } from "react-dom/client";
+
+import {
+  ClientSideRowModelModule,
+  ModuleRegistry,
+  NumberFilterModule,
+  TextFilterModule,
+  ValidationModule,
+} from "ag-grid-community";
+import {
+  ColumnMenuModule,
+  ContextMenuModule,
+  FiltersToolPanelModule,
+  SetFilterModule,
+} from "ag-grid-enterprise";
+ModuleRegistry.registerModules([
+  NumberFilterModule,
+  ClientSideRowModelModule,
+  FiltersToolPanelModule,
+  ColumnMenuModule,
+  ContextMenuModule,
+  SetFilterModule,
+  TextFilterModule,
+  ValidationModule /* Development Only */,
+]);
+
+
 ModuleRegistry.registerModules([AllCommunityModule]);
+
+
+
+
+
 
 const CourseList = () => {
   const { classes, faculty, schedules } = getDataContext();
@@ -15,7 +47,7 @@ const CourseList = () => {
   const { setGrid } = useGridExport();
 
   const [colDefs, setColDefs] = useState([
-    { field: "subject", headerName: "WCU Prefix" },
+    { field: "subject", headerName: "WCU Prefix"},
     { field: "code", headerName: "Course Code" },
     { field: "name", headerName: "Course Name" },
     { field: "year", headerName: "Year" },
@@ -28,6 +60,13 @@ const CourseList = () => {
     { field: "room", headerName: "Room Number" },
     { field: "instructor", headerName: "Instructor" }
   ]);
+  const defaultColDef = useMemo(() => {
+    return {
+      flex: 1,
+      minWidth: 100,
+      filter: true,
+    };
+  }, []);
 
   useEffect(() => {
     console.log("Classes data from getDataContext:", classes);
@@ -69,7 +108,6 @@ const CourseList = () => {
     }
   }, [gridRef.current]); // runs once after mount
 
-
   return (
     <>
       <div
@@ -84,7 +122,9 @@ const CourseList = () => {
           ref={gridRef}
           rowData={rowData}
           columnDefs={colDefs}
-          domLayout="autoHeight"  // or "normal" or "autoHeight"
+          defaultColDef={defaultColDef}
+          domLayout="autoHeight"  
+
         />
       </div>
     </>
