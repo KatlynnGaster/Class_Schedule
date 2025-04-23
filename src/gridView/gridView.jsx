@@ -21,7 +21,14 @@ const GetAllClasses = () => {
       classType={cls.data.kind}
       classSec={cls.data.section}
       classTerm={cls.data.term}
-      classTime={schedules.find((s) => s.id === cls.id)?.data?.start?.hour + ":" + schedules.find((s) => s.id === cls.id)?.data?.start?.minute + "-" + schedules.find((s) => s.id === cls.id)?.data?.end?.hour + ":" + schedules.find((s) => s.id === cls.id)?.data?.end?.minute}
+      classTime={
+        (() => {
+          const scheduleData = schedules.find((s) => s.id === cls.id);
+          return scheduleData
+            ? `${String(scheduleData.data.start.hour)}:${String(scheduleData.data.start.minute).padStart(2,"0")}-${String(scheduleData.data.end.hour)}:${String(scheduleData.data.end.minute).padStart(2,"0")}`
+            : "unassigned";
+        })()
+      }      
     />
 </div>
   ));
