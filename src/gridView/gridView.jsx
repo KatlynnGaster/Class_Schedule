@@ -8,7 +8,7 @@ import ClassCard from "../ClassCard";
 import { getDataContext } from "../api/APIDataProvider";
 
 const GetAllClasses = () => {
-  const { classes } = getDataContext();
+  const { classes, schedules } = getDataContext();
   const classList = classes.map((cls) => (
     <div key={cls.id} className="class-container">
     <DragClassCard

@@ -12,12 +12,32 @@ function EditFeature({ classData, onUpdate }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Updated class data:', formData);
-    alert(`Class updated: ${formData.className}`);
-    if (onUpdate) onUpdate(formData); // Callback to parent
-  };
+  
+    try {
+      const response = await fetch(`/api/classes/${formData.id}`, {
+        method: 'POST', // or 'PATCH' if only updating partial fields
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      const updatedClass = await response.json();
+      console.log('Successfully updated:', updatedClass);
+      alert(`Class updated: ${updatedClass.className}`);
+  
+      if (onUpdate) onUpdate(updatedClass); // Callback to parent
+    } catch (err) {
+      console.error('Failed to update class:', err);
+      alert('Failed to update class. Please try again.');
+    }
+  };  
 
   const fields = [
     { name: 'className', label: 'Class Name' },

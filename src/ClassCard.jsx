@@ -12,7 +12,7 @@ function ClassCard({
   classType,
   classSec,
   classTerm,
-  scheduleData // ✅ Add scheduleData as a prop
+  classTime
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [classInfo, setClassInfo] = useState({
@@ -23,25 +23,14 @@ function ClassCard({
     classCode,
     classType,
     classSec,
-    classTerm
+    classTerm,
+    classTime
   });
 
   const handleUpdate = (updatedData) => {
     setClassInfo(updatedData);
     setIsEditing(false); // auto-close editor on save
   };
-
-  // Format the class time from scheduleData
-  let classTime = "Unassigned";
-
-  if (
-    scheduleData?.data?.start?.hour !== undefined &&
-    scheduleData?.data?.start?.minute !== undefined &&
-    scheduleData?.data?.end?.hour !== undefined &&
-    scheduleData?.data?.end?.minute !== undefined
-  ) {
-    classTime = `${scheduleData.data.start.hour}:${String(scheduleData.data.start.minute).padStart(2, "0")} - ${scheduleData.data.end.hour}:${String(scheduleData.data.end.minute).padStart(2, "0")}`;
-  }
 
   return (
     <>
@@ -60,15 +49,15 @@ function ClassCard({
             {classInfo.classDescrpt}
           </Card.Subtitle>
           <Card.Text>
-            Term: {classInfo.classTerm}
-            <br />
             Capacity: {classInfo.classCap}
+            <br />
+            Type: {classInfo.classType}
             <br />
             Section: {classInfo.classSec}
             <br />
-            Time: {classTime} {/* Display formatted class time */}
+            Term: {classInfo.classTerm}
             <br />
-            Type: {classInfo.classType}
+            Time: {classInfo.classTime}
           </Card.Text>
 
           <Button
