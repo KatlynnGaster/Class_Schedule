@@ -1,48 +1,91 @@
+import { useState } from 'react';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import EditFeature from './editFeature/editFeature.jsx';
 
+function ClassCard({
+  classId,
+  className,
+  classDescrpt,
+  classCap,
+  classCode,
+  classType,
+  classSec,
+  classTerm,
+  scheduleData // ✅ Add scheduleData as a prop
+}) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [classInfo, setClassInfo] = useState({
+    classId,
+    className,
+    classDescrpt,
+    classCap,
+    classCode,
+    classType,
+    classSec,
+    classTerm
+  });
 
-const ItemTypes = {
-  CLASS: "class",
-};
+  const handleUpdate = (updatedData) => {
+    setClassInfo(updatedData);
+    setIsEditing(false); // auto-close editor on save
+  };
 
-function ClassCard({classId, className, classDescrpt, classCap, classCode, classType, classSec, classTerm}) {
+  // Format the class time from scheduleData
+  let classTime = "Unassigned";
 
-    return (
-        <>
-          <Card
-            // ref={drag}
-            bg="primary" // Choose a single color (e.g., 'primary')
-            key={classId}
-            text="white" // Text color is 'white' because 'primary' is dark
-            // style={{ width: '18rem', opacity: isDragging ? 0.5 : 1, cursor: "grab" }}
-            style={{ width: '14rem'}}
-            className="mb-2"
+  if (
+    scheduleData?.data?.start?.hour !== undefined &&
+    scheduleData?.data?.start?.minute !== undefined &&
+    scheduleData?.data?.end?.hour !== undefined &&
+    scheduleData?.data?.end?.minute !== undefined
+  ) {
+    classTime = `${scheduleData.data.start.hour}:${String(scheduleData.data.start.minute).padStart(2, "0")} - ${scheduleData.data.end.hour}:${String(scheduleData.data.end.minute).padStart(2, "0")}`;
+  }
+
+  return (
+    <>
+      <Card
+        bg="primary"
+        key={classInfo.classId}
+        text="white"
+        style={{ width: '14rem' }}
+        className="mb-2"
+      >
+        <Card.Header>{classInfo.className}</Card.Header>
+        <Card.Body>
+          <Card.Subtitle>
+            {classInfo.classCode}
+            <br />
+            {classInfo.classDescrpt}
+          </Card.Subtitle>
+          <Card.Text>
+            Term: {classInfo.classTerm}
+            <br />
+            Capacity: {classInfo.classCap}
+            <br />
+            Section: {classInfo.classSec}
+            <br />
+            Time: {classTime} {/* Display formatted class time */}
+            <br />
+            Type: {classInfo.classType}
+          </Card.Text>
+
+          <Button
+            variant="light"
+            size="sm"
+            onClick={() => setIsEditing((prev) => !prev)}
           >
-            <Card.Header> {/*CSCI 3155*/} {className} </Card.Header>
-            <Card.Body>
-              <Card.Subtitle>
-                {/* Principles of Programming Languages */}
-                {classCode}
-                <br />
-                {classDescrpt}
-                </Card.Subtitle>
-              <Card.Text>
-                {/* TTh 9:30 - 10:45
-                <br />
-                Kathy */}
-                Capacity: {classCap}
-                <br />
-                Type: {classType}
-                <br />
-                Section: {classSec}
-                <br />
-                Term: {classTerm}
+            {isEditing ? 'Close Editor' : 'Edit'}
+          </Button>
+        </Card.Body>
+      </Card>
 
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </>
-      );
-    }      
+      {isEditing && (
+        <EditFeature classData={classInfo} onUpdate={handleUpdate} />
+      )}
+    </>
+  );
+}
 
 export default ClassCard;
