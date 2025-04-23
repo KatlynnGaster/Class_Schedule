@@ -21,6 +21,7 @@ const GetAllClasses = () => {
       classType={cls.data.kind}
       classSec={cls.data.section}
       classTerm={cls.data.term}
+      classTime={schedules.find((s) => s.id === cls.id)?.data?.start?.hour + ":" + schedules.find((s) => s.id === cls.id)?.data?.start?.minute + "-" + schedules.find((s) => s.id === cls.id)?.data?.end?.hour + ":" + schedules.find((s) => s.id === cls.id)?.data?.end?.minute}
     />
 </div>
   ));
@@ -31,7 +32,7 @@ const ItemTypes = {
   CLASS: "class",
 };
 
-function DragClassCard({ classId, className, classDescrpt, classCap, classCode, classType, classSec, classTerm}) {
+function DragClassCard({ classId, className, classDescrpt, classCap, classCode, classType, classSec, classTerm, classTime}) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.CLASS,
     item: { classId, className },
@@ -59,6 +60,7 @@ function DragClassCard({ classId, className, classDescrpt, classCap, classCode, 
       classType={classType}
       classSec={classSec} 
       classTerm={classTerm}
+      classTime={classTime}
     />
     </div>
   );
