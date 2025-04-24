@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Container, Navbar, Nav, Form, Button, Alert } from 'react-bootstrap';
 import ScheduleGrid from '../gridView/gridView';
 import CourseList from '../listView/listView';
@@ -6,9 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './homepage.css';
 import * as XLSX from 'xlsx'; // ← for parsing Excel files
 import postTableData from '../api/uploadClassLogic';
+import { GridExportProvider, GridExportContext } from '../DownloadData/GridExportContent';
 
 
-const App = () => {
+const AppContent = () => {
   const [view, setView] = useState('grid'); // Track the current view
   const [file, setFile] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false); // ← success state
@@ -17,6 +18,8 @@ const App = () => {
 
  //custom hook for backend interaction
   const { table, error, fetchTableData } = postTableData();
+
+  const { downloadCSV } = useContext(GridExportContext);
 
   const handleViewSwitch = (viewType) => {
     setView(viewType);
@@ -153,6 +156,7 @@ const App = () => {
             <Nav.Link onClick={() => handleViewSwitch('calendar')}>Calendar View</Nav.Link>
             <Nav.Link onClick={() => handleViewSwitch('list')}>List View</Nav.Link>
           </Nav>
+          <Button variant="outline-info" onClick={downloadCSV}>Download CSV</Button>
         </Container>
       </Navbar>
 
@@ -203,6 +207,12 @@ const App = () => {
     </div>
   );
 };
+
+const App = () => (
+  <GridExportProvider>
+    <AppContent />
+  </GridExportProvider>
+);
 
 export default App;
 
