@@ -52,6 +52,28 @@ export const addClass = async (classData) => {
     return isSuccess;
 };
 
+export const getCombinedClassDetails = async () => {
+    const apiEndpoint = url + `/gcd?scope=all`;
+    const inputMethod = 'GET';
+
+    try {
+        const response = await sendRequest({
+            apiEndpoint,
+            inputMethod,
+        });
+        console.log("Response from getClassInfo:", response);
+
+        if (response && Array.isArray(response)) {
+            return response;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching schedules:", error);
+        throw error;
+    }
+};
+
 export const getAllClass = async () => {
     const apiEndpoint = url + `/class?scope=all`;
     const inputMethod = 'GET';
@@ -61,7 +83,7 @@ export const getAllClass = async () => {
             apiEndpoint,
             inputMethod,
         });
-
+        console.log("Response from getClassInfo:", response);
         if (response && Array.isArray(response)) {
             return response; 
         } else {

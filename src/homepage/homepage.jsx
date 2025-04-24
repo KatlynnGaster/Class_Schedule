@@ -110,6 +110,9 @@ const AppContent = () => {
           entry["Times"] = entry["Times"] === "unknown" ? "0:00-0:00" : entry["Times"];
           entry["Days"] = entry["Days"] === "unknown" ? "MTWRF" : entry["Days"];
           entry["Course Code"] = String(entry["Course Code"]);
+          entry["Year"] = String(entry["Year"]); // Ensure that entry["Year"] is a string
+          entry["Year"] = entry["Year"] === "-" ? "0" : entry["Year"]; // Convert "-" to "0"
+          // entry["Year"] should be converted to a string
 
           if (entry["Times"]) {
             entry["Times"] = normalizeTime(entry["Times"]);

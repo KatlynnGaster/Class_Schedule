@@ -123,6 +123,7 @@ const CourseList = () => {
           rowData={rowData}
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
+          modules={[ClientSideRowModelModule]}
           domLayout="autoHeight"  
 
         />
