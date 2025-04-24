@@ -52,25 +52,60 @@ export const addClass = async (classData) => {
     return isSuccess;
 };
 
+// export const getCombinedClassDetails = async () => {
+//     const apiEndpoint = url + '/gcd';
+//     const inputMethod = 'GET';
+
+//     try {
+//         const response = await sendRequest({
+//             apiEndpoint,
+//             inputMethod,
+//         });
+//         console.log("Response from getCombinedClassDetails:", response);
+
+//         if (response && Array.isArray(response)) {
+//             return response.json();
+//         } else {
+//             return [];
+//         }
+//     } catch (error) {
+//         console.error("Error fetching schedules:", error);
+//         throw error;
+//     }
+// };
+
 export const getCombinedClassDetails = async () => {
-    const apiEndpoint = url + `/gcd?scope=all`;
+    const apiEndpoint = url + '/gcd';
     const inputMethod = 'GET';
 
     try {
-        const response = await sendRequest({
-            apiEndpoint,
-            inputMethod,
+        // Fetching the data directly using the fetch API
+        const response = await fetch(apiEndpoint, {
+            method: inputMethod,
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
-        console.log("Response from getClassInfo:", response);
 
-        if (response && Array.isArray(response)) {
-            return response;
+        // Check if the response is OK (status code 200-299)
+        if (response.ok) {
+            const data = await response.json(); // Parse the response as JSON
+            console.log("Response from getCombinedClassDetails:", data);
+
+            // Ensure the data is an array before returning it
+            if (Array.isArray(data)) {
+                return data;
+            } else {
+                console.error("API returned data, but it is not an array.");
+                return [];
+            }
         } else {
+            console.error("Failed to fetch data. Status:", response.status);
             return [];
         }
     } catch (error) {
         console.error("Error fetching schedules:", error);
-        throw error;
+        throw error; // Rethrow the error if necessary
     }
 };
 

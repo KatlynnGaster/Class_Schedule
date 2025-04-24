@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import { getDataContext } from "../api/APIDataProvider";
 
 const CourseList = () => {
-  const { classes, faculty, schedules } = getDataContext();
+  const { nclasses } = getDataContext();
   const [rowData, setRowData] = useState([]);
   const gridRef = useRef(); //ref for the grid
 
@@ -39,30 +39,27 @@ const CourseList = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Classes data from getDataContext:", classes);
-    console.log("Faculty data from getDataContext:", faculty);
-    console.log("Schedules data from getDataContext:", schedules);
+    console.log("Classes data from getDataContext:", nclasses);
 
 
-    if (classes && Array.isArray(classes) && classes.length > 0) {
+
+    if (nclasses && Array.isArray(nclasses) && nclasses.length > 0) {
      
-      const mapped = classes.map((cls) => {
-        const instructorData = faculty?.find((f) => f?.id === cls?.id);
-        const scheduleData = schedules?.find((s) => s?.id === cls?.id);
+      const mapped = nclasses.map((cls) => {
 
         return {
-          subject: cls?.data?.kind,
-          code: cls?.data?.code,
-          name: cls?.data?.name,
-          year: cls?.data?.year,  // there is still no year in table
-          section: cls?.data?.section,
-          term: cls?.data?.term,
-          days: scheduleData ? scheduleData?.data?.days : "unassigned",     
-          time: scheduleData ? `${scheduleData?.data?.start?.hour}:${String(scheduleData?.data?.start?.minute).padStart(2,"0")}-${scheduleData?.data?.end?.hour}:${String(scheduleData?.data?.end?.minute).padStart(2,"0")}` : "unassigned",
-          cap: cls?.data?.capacity,
-          credit: cls?.data?.credit, // there is still no credit in table
-          room: cls?.data?.room, // there is rooms in table, but not assigned to classes yet
-          instructor: instructorData ? instructorData?.data?.name : "unassigned",
+          subject: cls.class_type,
+          code: cls.code,
+          name: cls.name,
+          year: cls.year,  // there is still no year in table
+          section: cls.section,
+          term: cls.term,
+          days: cls.schedule[0].days,     
+          time: cls.schedule[0].start_hour + ":" + String(cls.schedule[0].start_minute).padStart(2,"0") + " - " + cls.schedule[0].end_hour + ":" + String(cls.schedule[0].end_minute).padStart(2,"0"),
+          cap: cls.capacity,
+          credit: cls.credit, // there is still no credit in table
+          room: cls.room[0].room_number, // there is rooms in table, but not assigned to classes yet
+          instructor: cls.faculty[0].name,
         };
       });
       console.log("Mapped data for AG Grid:", mapped);
@@ -70,7 +67,7 @@ const CourseList = () => {
     } else {
       setRowData([]);
     }
-  }, [classes, faculty, schedules]);
+  }, [nclasses]);
 
   useEffect(() => {
     if (gridRef.current) {

@@ -1,21 +1,18 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { getAllClass, getFaculty, getSchedules } from './api';
+import { getCombinedClassDetails} from './api';
 
 const DataContext = createContext();
 const APIDataProvider = ({ children }) => {
-    const [classes, setClasses] = useState([]);
-    const [faculty, setFaculty] = useState([]);
-    const [schedules, setSchedules] = useState([]);
+    const [nclasses, setNClasses] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedClasses = await getAllClass();
-                const fetchedFaculty = await getFaculty();
-                const fetchedSchedules = await getSchedules(); // Assuming you have a function to fetch schedules
-                setSchedules(fetchedSchedules);
-                setFaculty(fetchedFaculty);
-                setClasses(fetchedClasses);
+            
+                const fetchedNClasses = await getCombinedClassDetails(); // Assuming you have a function to fetch nclasses
+               
+                setNClasses(fetchedNClasses); // Assuming you have a function to fetch nclasses
+                console.log('Fetched classes:', fetchedNClasses);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -25,7 +22,7 @@ const APIDataProvider = ({ children }) => {
     }, []);
 
     return (
-        <DataContext.Provider value={{ classes, faculty, schedules }}>
+        <DataContext.Provider value={{ nclasses }}>
             {children}
         </DataContext.Provider>
     );

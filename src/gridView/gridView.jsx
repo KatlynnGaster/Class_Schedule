@@ -10,27 +10,20 @@ import ClassCard from "../ClassCard";
 import { getDataContext } from "../api/APIDataProvider";
 
 const GetAllClasses = () => {
-  const { classes, schedules } = getDataContext();
-  const classList = classes.map((cls) => (
+  const { nclasses } = getDataContext();
+  const classList = nclasses.map((cls) => (
     <div key={cls.id} className="class-container">
     <DragClassCard
       key={cls.id}
       classId={cls.id}
-      className={cls.data.name}
-      classDescrpt={cls.data.description}
-      classCap={cls.data.capacity}
-      classCode={cls.data.code}
-      classType={cls.data.kind}
-      classSec={cls.data.section}
-      classTerm={cls.data.term}
-      classTime={
-        (() => {
-          const scheduleData = schedules.find((s) => s.id === cls.id);
-          return scheduleData
-            ? `${String(scheduleData.data.start.hour)}:${String(scheduleData.data.start.minute).padStart(2,"0")}-${String(scheduleData.data.end.hour)}:${String(scheduleData.data.end.minute).padStart(2,"0")}`
-            : "unassigned";
-        })()
-      }      
+      className={cls.name}
+      classDescrpt={cls.description}
+      classCap={cls.capacity}
+      classCode={cls.code}
+      classType={cls.class_type}
+      classSec={cls.section}
+      classTerm={cls.term}
+      classTime={cls.schedule[0].start_hour + ":" + String(cls.schedule[0].start_minute).padStart(2,"0") + " - " + cls.schedule[0].end_hour + ":" + String(cls.schedule[0].end_minute).padStart(2,"0")}      
     />
 </div>
   ));
